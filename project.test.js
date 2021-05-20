@@ -24,12 +24,12 @@ describe('server.js', () => {
     it('can get the correct number of accounts', async () => {
       let res = await request(server).get('/api/accounts')
       expect(res.body).toHaveLength(accounts.length)
-    }, 500)
+    })
     it('gets the empty array if there are no accounts', async () => {
       await db('accounts').truncate()
       let res = await request(server).get('/api/accounts')
       expect(res.body).toHaveLength(0)
-    }, 500)
+    })
   })
   describe('2 [GET] /api/accounts/:id', () => {
     it('can get the correct account', async () => {
@@ -37,15 +37,15 @@ describe('server.js', () => {
       expect(res.body).toMatchObject(accounts[0])
       res = await request(server).get('/api/accounts/2')
       expect(res.body).toMatchObject(accounts[1])
-    }, 500)
+    })
     it('responds with a 404 if the id does not exist', async () => {
       let res = await request(server).get('/api/accounts/111')
       expect(res.status).toBe(404)
-    }, 500)
+    })
     it('responds with "account not found" if the id does not exist', async () => {
       let res = await request(server).get('/api/accounts/111')
       expect(res.body.message).toMatch(/account not found/i)
-    }, 500)
+    })
   })
   describe('3 [POST] /api/accounts', () => {
     it('creates a new account in the database', async () => {
@@ -138,7 +138,7 @@ describe('server.js', () => {
     it('responds with a 404 if the id does not exist', async () => {
       let res = await request(server).put('/api/accounts/111').send({ name: 'foo', budget: 1000 })
       expect(res.status).toBe(404)
-    }, 500)
+    })
     it('responds with a 400 and proper error if name or budget are undefined', async () => {
       const invalid1 = {}
       const invalid2 = { name: "foo" }
@@ -200,14 +200,14 @@ describe('server.js', () => {
       await request(server).delete('/api/accounts/1')
       const account = await db('accounts').where('id', 1).first()
       expect(account).not.toBeDefined()
-    }, 500)
+    })
     it('responds with a 404 if the id does not exist', async () => {
       let res = await request(server).delete('/api/accounts/111')
       expect(res.status).toBe(404)
-    }, 500)
+    })
     it('responds with "account not found" if the id does not exist', async () => {
       let res = await request(server).delete('/api/accounts/111')
       expect(res.body.message).toMatch(/account not found/i)
-    }, 500)
+    })
   })
 })
